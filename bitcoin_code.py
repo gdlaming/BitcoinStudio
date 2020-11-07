@@ -23,8 +23,8 @@ def switch_endian(hex_string):
     @param hex_string The hex-string-encoded number to be reversed
     @return A bytewise-reversed copy of hex_string
     '''
-    hex_val = bytes.fromhex(hex_string)
-    rev = hex_val[::-1].hex()
+    hex_val = hex_string.encode('hex_codec')
+    rev = hex_val[::-1].decode('hex')
     return rev
 
 def int32_to_little_endian(n):
@@ -106,16 +106,30 @@ def mine_block(version, prev_hash, merkle_root, ts, bits):
       on the Bitcoin hash algorithm.
     Note that parameters must be in Little Endian format.
     
-    @param version: Bitcoin version
+    trparam version: Bitcoin version
     @param prev_hash: Hash of previous block 
     @param merkle_root: root of Merkle tree for the block 
     @param ts: timestamp
     @param bits: Bits field of block; encodes threshold below which hash value must be
-    
+       
     @return nonce value
     '''
     # YOUR CODE HERE
-
+    #hash_bits = hash_block(version, prev_hash,merkle_root,ts,bits)
+    #lil_bits = switch_endian(bits)
+    print(bits)
+    print('\n')
+    threshold =extract_threshold(bits)
+    threshold_hex  = str(threshold).decode('hex_codec')
+    threshold_endian = switch_endian(threshold_hex)
+    print(threshold_endian)
+    print("\n")
+    for i in range (2952790016, 3221225472):
+	hash_value = hash_block(version, prev_hash,merkle_root,ts,i).decode('hex')
+	if(hash_value < threshold_endian):
+	    print(hash_value)
+	    print("\n")
+	    return i
     # Hint to make problem tractable: the solution nonce is between
     #  0xb0000000 and 0xc0000000.
     # Hint on formatting: depending on how you generate your nonce
@@ -131,5 +145,5 @@ if __name__ == "__main__":
     #  mine_block()
 
     # YOUR CODE HERE
-    the_hash_block= hash_block("01000000","99ba9de222aeae9fff2d33df2e147b693e94568eb21643f0eb19000000000000","d60fbe4a6f19d7558052ddbe2986fa1e3e02166c4e61d68c1da5361b45dad70b","569ade4d","f2b9441a","59ad690d")	
-    print(the_hash_block)
+    mine = mine_block("01000000", "0935dc5fe42633dcc3329651a66a58d32381eb8484c28ec7a827000000000000", "80458a3423c112590b20e8c32750279f5d3276b0a689e2b183011c9ec821daa9","0c9ede4d","f2b9441a")
+    print(mine_block)
