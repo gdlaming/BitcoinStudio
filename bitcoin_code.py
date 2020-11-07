@@ -4,7 +4,7 @@
 #  by Steve Cole for cse433s Spring 2019
 #  last revised Fall 2020
 
-# NAME: 
+# NAME: micah, david, gillian
 
 # Fill in the code sections marked # YOUR CODE HERE . You may use any of the
 #  utility functions contained in this file to help you.
@@ -89,9 +89,14 @@ def hash_block(version, prev_hash, merkle_root, ts, bits, nonce):
     @return String representing Big Endian hex encoding of hash value
     '''
     # YOUR CODE HERE
+    header_hex = (version + prev_hash + merkle_root + ts + bits + nonce)
+    header_bin = header_hex.decode('hex')
+    hash = hashlib.sha256(hashlib.sha256(header_bin).digest()).digest()
+    hash.encode('hex_codec')
+    return hash[::-1].encode('hex_codec')
 
     # Hint: don't forget to change the return value
-    return None
+    #return None
 
 def mine_block(version, prev_hash, merkle_root, ts, bits):
     '''
@@ -126,4 +131,5 @@ if __name__ == "__main__":
     #  mine_block()
 
     # YOUR CODE HERE
-    print('Nothing implemented yet.')
+    the_hash_block= hash_block("01000000","99ba9de222aeae9fff2d33df2e147b693e94568eb21643f0eb19000000000000","d60fbe4a6f19d7558052ddbe2986fa1e3e02166c4e61d68c1da5361b45dad70b","569ade4d","f2b9441a","59ad690d")	
+    print(the_hash_block)
